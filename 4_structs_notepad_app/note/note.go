@@ -28,7 +28,7 @@ func New(title, body string) (Note, error) {
 }
 
 func (n Note) Display() {
-	fmt.Printf("Your note title %v has following content: \n\n %v", n.Title, n.Body)
+	fmt.Printf("\nYour note title %v has following content: \n\n %v", n.Title, n.Body)
 }
 
 // saving note as txt file
@@ -36,7 +36,7 @@ func (n Note) Save() {
 	fileName := strings.ReplaceAll(n.Title, " ", "_")
 	fileName = strings.ToLower(fileName) + ".txt"
 	os.WriteFile(fileName, []byte(n.Body), 0644)
-	fmt.Printf("Congrats! your note is saved as %v", fileName)
+	fmt.Printf("\nCongrats! your note is saved as %v and ", fileName)
 }
 
 // saving note as json file
@@ -48,6 +48,6 @@ func (n Note) SaveJson() error {
 		return err
 	}
 
-	fmt.Printf("Congrats! your note is saved as %v", fileName)
+	fmt.Println(fileName)
 	return os.WriteFile(fileName, json, 0644)
 }

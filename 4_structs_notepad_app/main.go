@@ -18,6 +18,8 @@ func main() {
 	userNote.Display()
 	userNote.Save()
 	userNote.SaveJson()
+	fmt.Println("\nPress Enter to exit...")
+	bufio.NewReader(os.Stdin).ReadBytes('\n')
 	//fmt.Println("Title: ", userNote.Title)
 	//fmt.Println("Body: ", userNote.Body)
 
