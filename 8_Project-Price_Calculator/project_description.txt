@@ -1,0 +1,17 @@
+A tool that calculates "tax included" prices for a given list of prices and tax rates.
+
+
+Input Data 
+
+  Prices        Tax Rates 
+    10              0
+    20              10
+    30              20
+Stored in file      Defined in code
+
+Result (stored in result JSON file)
+
+Tax Rates      0    10    20
+Prices         10   11    12
+               20   22    24
+               30   33    36
