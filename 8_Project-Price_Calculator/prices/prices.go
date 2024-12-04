@@ -1,69 +1,54 @@
 package prices
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"strconv"
+
+	"example.com/price-calculator/conversion"
+	"example.com/price-calculator/iomanager"
 )
 
 type TaxIncludedPriceJob struct {
-	TaxRate           float64
-	InputPrices       []float64
-	TaxincludedPrices map[string]float64
+	IOManager         iomanager.IOManager `json:"-"` // iomanager package . IOManager interface
+	TaxRate           float64             `json:"tax_rate"`
+	InputPrices       []float64           `json:"input_prices"`
+	TaxincludedPrices map[string]string   `json:"tax_included_prices"`
 }
 
-func (job *TaxIncludedPriceJob) LoadData() {
-	file, err := os.Open("prices.txt")
-	if err != nil {
-		fmt.Println("File not found!")
-		fmt.Println(err)
-	}
-	// NewScanner() is used to create a Scanner, which is a convenient tool for reading input from a variety of sources
-	//(like files, standard input, or strings) token by token.
-	scanner := bufio.NewScanner(file)
-	var lines []string // to store scanned prices.
-	//scanner.Scan() // read one line at a time from file.
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text()) // text() to get the content of scanned line by scan()
-	}
-	err = scanner.Err()
-	if err != nil {
-		fmt.Println("Reading the file content failed!!")
-		fmt.Println(err)
-		file.Close()
-		return
-	}
-	prices := make([]float64, len(lines))
+func (job *TaxIncludedPriceJob) LoadData() error {
 
-	for lineIndex, line := range lines {
-		floatPrice, err := strconv.ParseFloat(line, 64) // func to convert string to float ; 64 here means float64
-		if err != nil {
-			fmt.Println("Converting price to float failed ")
-			fmt.Println(err)
-			file.Close()
-			return
-		}
-		prices[lineIndex] = floatPrice
+	lines, err := job.IOManager.ReadLines()
+	if err != nil {
+		return err
+	}
+
+	prices, err := conversion.StringsToFloats(lines)
+	if err != nil {
+		return err
 	}
 	job.InputPrices = prices
+	return nil
 
 }
 
-func (job *TaxIncludedPriceJob) Process() {
-	job.LoadData()
+func (job *TaxIncludedPriceJob) Process() error {
+	err := job.LoadData()
+	if err != nil {
+		return err
+	}
 	result := make(map[string]string) // as we declared map TaxincludedPrices
 	for _, price := range job.InputPrices {
 		taxIncludedPrice := price * (1 + job.TaxRate)
 		result[fmt.Sprintf("%.2f", price)] = fmt.Sprintf("%.2f", taxIncludedPrice)
 	}
-	fmt.Println(result)
+	job.TaxincludedPrices = result
+	return job.IOManager.WriteResult(job)
 }
 
 //constructor function
 
-func NewTaxIncludedPriceJob(taxRate float64) *TaxIncludedPriceJob {
+func NewTaxIncludedPriceJob(iom iomanager.IOManager, taxRate float64) *TaxIncludedPriceJob {
 	return &TaxIncludedPriceJob{
+		IOManager:   iom,
 		TaxRate:     taxRate,
 		InputPrices: []float64{10, 20, 30},
 	}
