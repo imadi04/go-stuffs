@@ -39,11 +39,8 @@ This repository is a collection of projects and examples that explore the featur
    - Practical examples of working with JSON data.
    - Explores encoding, decoding, and custom configurations for JSON operations.
 
-### 9. **Goroutines**
-   - Concurrency handling in Go using goroutines.
-   - Examples of synchronizing concurrent operations with channels and `WaitGroup`.
 
-### 10. **Collections in Go**
+### 9. **Collections in Go**
    - Practical usage of slices, arrays, and maps with real-world examples.
    - Highlights Go's memory efficiency and collection management.
 
