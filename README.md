@@ -1,6 +1,4 @@
-Here's an updated **README.md** file for your repository that includes the price calculator project:
 
----
 
 # Go Stuffs
 
